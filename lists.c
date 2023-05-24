@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * add_node - adds a node to the start of the list
  * @head: address of pointer to head node
@@ -11,11 +10,13 @@
 list_t *add_node(list_t **head, const char *str, int num)
 {
 	if (!head)
-		return NULL;
+		return (NULL);
 
 	list_t *new_head = malloc(sizeof(list_t));
+
 	if (!new_head)
-		return NULL;
+
+		return (NULL);
 
 	_memset((void *)new_head, 0, sizeof(list_t));
 	new_head->num = num;
@@ -26,14 +27,14 @@ list_t *add_node(list_t **head, const char *str, int num)
 		if (!new_head->str)
 		{
 			free(new_head);
-			return NULL;
+			return (NULL);
 		}
 	}
 
 	new_head->next = *head;
 	*head = new_head;
 
-	return new_head;
+	return (new_head);
 }
 
 /**
@@ -47,11 +48,13 @@ list_t *add_node(list_t **head, const char *str, int num)
 list_t *add_node_end(list_t **head, const char *str, int num)
 {
 	if (!head)
-		return NULL;
+		return (NULL);
 
 	list_t *new_node = malloc(sizeof(list_t));
+
 	if (!new_node)
-		return NULL;
+
+		return (NULL);
 
 	_memset((void *)new_node, 0, sizeof(list_t));
 	new_node->num = num;
@@ -62,23 +65,24 @@ list_t *add_node_end(list_t **head, const char *str, int num)
 		if (!new_node->str)
 		{
 			free(new_node);
-			return NULL;
+			return (NULL);
 		}
 	}
 
 	if (*head)
 	{
 		list_t *node = *head;
-		while (node->next)
+
+		while (node->next  :
 			node = node->next;
-		node->next = new_node;
+			node->next = new_node;
 	}
 	else
 	{
 		*head = new_node;
 	}
 
-	return new_node;
+	return (new_node);
 }
 
 /**
@@ -99,7 +103,7 @@ size_t print_list_str(const list_t *h)
 		i++;
 	}
 
-	return i;
+	return (i);
 }
 
 /**
@@ -112,7 +116,7 @@ size_t print_list_str(const list_t *h)
 int delete_node_at_index(list_t **head, unsigned int index)
 {
 	if (!head || !*head)
-		return 0;
+		return (0);
 
 	if (index == 0)
 	{
@@ -120,7 +124,7 @@ int delete_node_at_index(list_t **head, unsigned int index)
 		*head = (*head)->next;
 		free(node->str);
 		free(node);
-		return 1;
+		return (1);
 	}
 
 	list_t *node = *head;
@@ -139,10 +143,10 @@ int delete_node_at_index(list_t **head, unsigned int index)
 		prev_node->next = node->next;
 		free(node->str);
 		free(node);
-		return 1;
+		return (1);
 	}
 
-	return 0;
+	return (0);
 }
 
 /**
