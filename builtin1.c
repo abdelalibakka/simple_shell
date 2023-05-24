@@ -3,7 +3,6 @@
  * @name: name of the command
  * @func: function pointer to the command
  */
-typedef struct builtins
 {
 	char *name;
 	int (*func)(char **args, char **env);
