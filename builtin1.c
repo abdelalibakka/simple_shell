@@ -102,13 +102,21 @@ int _myalias(info_t *info)
 		}
 		return (0);
 	}
+
 	for (i = 1; info->argv[i]; i++)
 	{
 		p = _strchr(info->argv[i], '=');
 		if (p)
-			set_alias(info, info->argv[i]);
+		{
+			char *alias = _strdup(info->argv[i]);
+			set_alias(info, alias);
+			free(alias);
+		}
 		else
-			print_alias(node_starts_with(info->alias, info->argv[i], '='));
+		{
+			node = node_starts_with(info->alias, info->argv[i], '=');
+			print_alias(node);
+		}
 	}
 
 	return (0);
