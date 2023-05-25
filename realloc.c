@@ -2,76 +2,61 @@
 
 /**
  * _memset - fills memory with a constant byte
- * @s: pointer to the memory area
+ * @s: the pointer to the memory area
  * @b: the byte to fill *s with
- * @n: the number of bytes to be filled
- *
- * Return: pointer to the memory area s
+ * @n: the amount of bytes to be filled
+ * Return: (s) a pointer to the memory area s
  */
 char *_memset(char *s, char b, unsigned int n)
 {
 	unsigned int i;
-	char *ptr = s;
 
 	for (i = 0; i < n; i++)
-		*(ptr++) = b;
-	return s;
+		s[i] = b;
+	return (s);
 }
 
 /**
- * free_str_array - frees an array of strings
- * @arr: the array of strings
- *
- * Return: void
+ * ffree - frees a string of strings
+ * @pp: string of strings
  */
-void free_str_array(char **arr)
+void ffree(char **pp)
 {
-	char **ptr = arr;
+	char **a = pp;
 
-	if (!arr)
+	if (!pp)
 		return;
-
-	while (*arr)
-		free(*(arr++));
-
-	free(ptr);
+	while (*pp)
+		free(*pp++);
+	free(a);
 }
 
 /**
  * _realloc - reallocates a block of memory
- * @ptr: pointer to the previously allocated block
- * @old_size: size of the old block
- * @new_size: size of the new block
+ * @ptr: pointer to previous malloc'ated block
+ * @old_size: byte size of previous block
+ * @new_size: byte size of new block
  *
- * Return: pointer to the reallocated memory block
+ * Return: pointer to da ol'block nameen.
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
-	char *new_ptr;
+	char *p;
 
 	if (!ptr)
 		return (malloc(new_size));
-
-	if (new_size == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-
+	if (!new_size)
+		return (free(ptr), NULL);
 	if (new_size == old_size)
 		return (ptr);
 
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
+	p = malloc(new_size);
+	if (!p)
 		return (NULL);
 
-	if (new_size < old_size)
-		old_size = new_size;
-
-	_memset(new_ptr, 0, new_size);
+	old_size = old_size < new_size ? old_size : new_size;
 	while (old_size--)
-		new_ptr[old_size] = ((char *)ptr)[old_size];
-
+		p[old_size] = ((char *)ptr)[old_size];
 	free(ptr);
-	return (new_ptr);
+	return (p);
 }

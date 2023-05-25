@@ -45,15 +45,11 @@ int _mysetenv(info_t *info)
 {
 	if (info->argc != 3)
 	{
-		_eputs("Incorrect number of arguments\n");
+		_eputs("Incorrect number of arguements\n");
 		return (1);
 	}
-
-	int result = _setenv(info, info->argv[1], info->argv[2]);
-
-	if (result)
+	if (_setenv(info, info->argv[1], info->argv[2]))
 		return (0);
-
 	return (1);
 }
 
