@@ -86,38 +86,39 @@ int print_d(int input, int fd)
 }
 
 /**
- * convert_number - converter function, a clone of itoa
- * @num: number
- * @base: base
- * @flags: argument flags
+ * convert_number - converts a number to a string representation
+ * @num: the number to convert
+ * @base: the base for the conversion
+ * @flags: flags for formatting options
  *
- * Return: string
+ * Return: the string representation of the number
  */
 char *convert_number(long int num, int base, int flags)
 {
-	static char *array;
+	static char *digits;
 	static char buffer[50];
 	char sign = 0;
 	char *ptr;
-	unsigned long n = num;
+	unsigned long n = (unsigned long) num;
 
 	if (!(flags & CONVERT_UNSIGNED) && num < 0)
 	{
-		n = -num;
+		n = (unsigned long) (-num);
 		sign = '-';
-
 	}
-	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+
+	digits = (flags & CONVERT_LOWERCASE) ? "0123456789abcdef" : "0123456789ABCDEF";
 	ptr = &buffer[49];
 	*ptr = '\0';
 
-	do	{
-		*--ptr = array[n % base];
+	do {
+		*--ptr = digits[n % base];
 		n /= base;
 	} while (n != 0);
 
 	if (sign)
 		*--ptr = sign;
+
 	return (ptr);
 }
 
