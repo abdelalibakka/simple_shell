@@ -1,3 +1,6 @@
+#include "shell.h"
+
+
 /**
  * struct builtins - structure for built-in commands
  * @name: name of the command
