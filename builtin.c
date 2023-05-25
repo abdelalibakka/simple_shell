@@ -9,24 +9,25 @@
  */
 int _myexit(info_t *info)
 {
-	int exitcheck;
+	int exit_status = 0;
 
-	if (info->argv[1]) /* If there is an exit arguement */
+	if (info->argv[1]) /* If there is an exit argument */
 	{
-		exitcheck = _erratoi(info->argv[1]);
-		if (exitcheck == -1)
+		exit_status = atoi(info->argv[1]);
+		if (exit_status == 0 && strcmp(info->argv[1], "0") != 0)
 		{
 			info->status = 2;
-			print_error(info, "Illegal number: ");
+			print_error(info, "Invalid exit number: ");
 			_eputs(info->argv[1]);
 			_eputchar('\n');
-			return (1);
+			return 1;
 		}
-		info->err_num = _erratoi(info->argv[1]);
-		return (-2);
+		info->err_num = exit_status;
+		return -2;
 	}
+
 	info->err_num = -1;
-	return (-2);
+	return -2;
 }
 
 /**
