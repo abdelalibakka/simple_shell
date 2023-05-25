@@ -1,11 +1,11 @@
 #include "shell.h"
 
-
 /**
  * struct builtins - structure for built-in commands
  * @name: name of the command
  * @func: function pointer to the command
  */
+
 {
 	char *name;
 	int (*func)(char **args, char **env);
@@ -55,8 +55,7 @@ int exit_shell(char **args, char **env)
 	int exit_status = 0;
 
 	if (args[1] != NULL)
-	{
 		exit_status = _atoi(args[1]);
-	}
+
 	exit(exit_status);
 }

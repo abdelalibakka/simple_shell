@@ -1,55 +1,73 @@
-#include "simple_shell.h"
+#include "shell.h"
 
-#define SIZE 256
 /**
- * _getline - reads an entire line from stream
- * @lineptr: ptr to ptr to
- * @n: the size of the buffer pointed to by *lineptr
- * @stream: pointer to filee stream from which to read the input line
- * Return: number of chars read including '\n' excluding '\0'
- * if error occurs or EOF, else return -1
+ * clear_info - initializes info_t struct
+ * @info: struct address
  */
-
-ssize_t _getline(char **lineptr, size_t *n, char *stream)
+void clear_info(info_t *info)
 {
-	static char buffer[SIZE], *p;
-	size_t size = *n, total_read = 0;
-	int fd;
-	ssize_t n_read = 0;
+	info->arg = NULL;
+	info->argv = NULL;
+	info->path = NULL;
+	info->argc = 0;
+}
 
-	if (*lineptr == NULL)
+/**
+ * set_info - initializes info_t struct
+ * @info: struct address
+ * @av: argument vector
+ */
+void set_info(info_t *info, char **av)
+{
+	int i = 0;
+
+	info->fname = av[0];
+	if (info->arg)
 	{
-		*lineptr = malloc(size);
-		if (*lineptr == NULL)
-			return (-1);
-	}
-	fd = open(stream, O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	while ((n_read = read(fd, buffer, SIZE)) > 0)
-	{
-		total_read += n_read;
-		p = buffer;
-		while (n_read > 0)
+		info->argv = strtow(info->arg, " \t");
+		if (!info->argv)
 		{
-			if (*n <= total_read)
+			info->argv = malloc(sizeof(char *) * 2);
+			if (info->argv)
 			{
-				size *= 2;
-				*lineptr = realloc(*lineptr, size);
-				if (*lineptr == NULL)
-				{
-					close(fd);
-					free(*lineptr);
-					return (-1);
-				} *n = size;
-			} (*lineptr)[total_read++] = *p++;
-			n_read--;
+				info->argv[0] = _strdup(info->arg);
+				info->argv[1] = NULL;
+			}
 		}
-		if (*(p - 1) == '\n')
-			break;
-	} close(fd);
-	if (total_read == 0 && n_read <= 0)
-		return (-1);
-	(*lineptr)[total_read] = '\0';
-	return (total_read);
+		for (i = 0; info->argv && info->argv[i]; i++)
+			;
+		info->argc = i;
+
+		replace_alias(info);
+		replace_vars(info);
+	}
+}
+
+/**
+ * free_info - frees info_t struct fields
+ * @info: struct address
+ * @all: true if freeing all fields
+ */
+void free_info(info_t *info, int all)
+{
+	ffree(info->argv);
+	info->argv = NULL;
+	info->path = NULL;
+	if (all)
+	{
+		if (!info->cmd_buf)
+			free(info->arg);
+		if (info->env)
+			free_list(&(info->env));
+		if (info->history)
+			free_list(&(info->history));
+		if (info->alias)
+			free_list(&(info->alias));
+		ffree(info->environ);
+			info->environ = NULL;
+		bfree((void **)info->cmd_buf);
+		if (info->readfd > 2)
+			close(info->readfd);
+		_putchar(BUF_FLUSH);
+	}
 }
