@@ -73,31 +73,52 @@ int read_history(info_t *info)
 	free(filename);
 	if (fd == -1)
 		return (0);
-	if (!fstat(fd, &st))
-		fsize = st.st_size;
-	if (fsize < 2)
+
+	if (fstat(fd, &st) != 0) {
+		close(fd);
 		return (0);
+	}
+
+	fsize = st.st_size;
+	if (fsize < 2) {
+		close(fd);
+		return (0);
+	}
+
 	buf = malloc(sizeof(char) * (fsize + 1));
-	if (!buf)
+	if (!buf) {
+		close(fd);
 		return (0);
+	}
+
 	rdlen = read(fd, buf, fsize);
-	buf[fsize] = 0;
-	if (rdlen <= 0)
-		return (free(buf), 0);
+	buf[fsize] = '\0';
 	close(fd);
-	for (i = 0; i < fsize; i++)
-		if (buf[i] == '\n')
-		{
-			buf[i] = 0;
+
+	if (rdlen <= 0) {
+		free(buf);
+		return (0);
+	}
+
+	for (i = 0; i < fsize; i++) {
+		if (buf[i] == '\n') {
+			buf[i] = '\0';
 			build_history_list(info, buf + last, linecount++);
 			last = i + 1;
 		}
+	}
+
 	if (last != i)
 		build_history_list(info, buf + last, linecount++);
+
 	free(buf);
 	info->histcount = linecount;
-	while (info->histcount-- >= HIST_MAX)
+
+	while (info->histcount >= HIST_MAX) {
 		delete_node_at_index(&(info->history), 0);
+		info->histcount--;
+	}
+
 	renumber_history(info);
 	return (info->histcount);
 }
