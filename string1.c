@@ -7,21 +7,19 @@
  *
  * Return: pointer to destination
  */
-char *_strcpy(char *dest, const char *src)
+char *_strcpy(char *dest, char *src)
 {
-	if (dest == NULL || src == NULL)
-		return dest;
+	int i = 0;
 
-	char *dest_start = dest;
-
-	while (*src)
+	if (dest == src || src == 0)
+		return (dest);
+	while (src[i])
 	{
-		*dest++ = *src++;
+		dest[i] = src[i];
+		i++;
 	}
-
-	*dest = '\0';
-
-	return dest_start;
+	dest[i] = 0;
+	return (dest);
 }
 
 /**
