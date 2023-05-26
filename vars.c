@@ -86,15 +86,20 @@ int replace_alias(info_t *info)
 		node = node_starts_with(info->alias, info->argv[0], '=');
 		if (!node)
 			return (0);
+
+		char *alias_value = strchr(node->str, '=');
+		if (!alias_value)
+			return (0);
+		alias_value++;
+
+		char *new_arg = strdup(alias_value);
+		if (!new_arg)
+			return (0);
+
 		free(info->argv[0]);
-		p = _strchr(node->str, '=');
-		if (!p)
-			return (0);
-		p = _strdup(p + 1);
-		if (!p)
-			return (0);
-		info->argv[0] = p;
+		info->argv[0] = new_arg;
 	}
+
 	return (1);
 }
 
