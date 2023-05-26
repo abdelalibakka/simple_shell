@@ -34,16 +34,15 @@ void set_info(info_t *info, char **av)
 				info->argv[1] = NULL;
 			}
 		}
-		if (info->argv)
-		{
-			for (i = 0; info->argv[i]; i++)
-				;
-			info->argc = i;
-			replace_alias(info);
-			replace_vars(info);
-		}
+		for (i = 0; info->argv && info->argv[i]; i++)
+			;
+		info->argc = i;
+
+		replace_alias(info);
+		replace_vars(info);
 	}
 }
+
 /**
  * free_info - frees info_t struct fields
  * @info: struct address
