@@ -26,16 +26,19 @@ size_t list_len(const list_t *h)
  */
 char **list_to_strings(list_t *head)
 {
+	size_t count = list_len(head);
+	char **strs = NULL;
 	list_t *node = head;
-	size_t i = list_len(head), j;
-	char **strs;
+	size_t i, j;
 	char *str;
 
-	if (!head || !i)
+	if (!head || count == 0)
 		return (NULL);
-	strs = malloc(sizeof(char *) * (i + 1));
+
+	strs = malloc(sizeof(char *) * (count + 1));
 	if (!strs)
 		return (NULL);
+
 	for (i = 0; node; node = node->next, i++)
 	{
 		str = malloc(_strlen(node->str) + 1);
@@ -47,9 +50,10 @@ char **list_to_strings(list_t *head)
 			return (NULL);
 		}
 
-		str = _strcpy(str, node->str);
+		_strcpy(str, node->str);
 		strs[i] = str;
 	}
+
 	strs[i] = NULL;
 	return (strs);
 }
