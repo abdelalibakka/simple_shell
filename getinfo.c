@@ -34,15 +34,16 @@ void set_info(info_t *info, char **av)
 				info->argv[1] = NULL;
 			}
 		}
-		for (i = 0; info->argv && info->argv[i]; i++)
-			;
-		info->argc = i;
-
-		replace_alias(info);
-		replace_vars(info);
+		if (info->argv)
+		{
+			for (i = 0; info->argv[i]; i++)
+				;
+			info->argc = i;
+			replace_alias(info);
+			replace_vars(info);
+		}
 	}
 }
-
 /**
  * free_info - frees info_t struct fields
  * @info: struct address
@@ -50,20 +51,21 @@ void set_info(info_t *info, char **av)
  */
 void free_info(info_t *info, int all)
 {
-	ffree((void **)info->argv);
+	ffree(info->argv);
 	info->argv = NULL;
 	info->path = NULL;
 	if (all)
 	{
-		free(info->arg);
+		if (!info->cmd_buf)
+			free(info->arg);
 		if (info->env)
 			free_list(&(info->env));
 		if (info->history)
 			free_list(&(info->history));
 		if (info->alias)
 			free_list(&(info->alias));
-		ffree((void **)info->environ);
-		info->environ = NULL;
+		ffree(info->environ);
+			info->environ = NULL;
 		bfree((void **)info->cmd_buf);
 		if (info->readfd > 2)
 			close(info->readfd);
