@@ -90,23 +90,24 @@ ssize_t get_input(info_t *info)
 }
 
 /**
- * read_buf - reads a buffer
- * @info: parameter struct
- * @buf: buffer
- * @i: size
+ * read_buf - reads data into a buffer
+ * @info: pointer to the info_t struct
+ * @buf: buffer to store the read data
+ * @i: pointer to the size variable
  *
- * Return: r
+ * Return: number of bytes read, 0 if buffer is not empty, or -1 on error
  */
 ssize_t read_buf(info_t *info, char *buf, size_t *i)
 {
 	ssize_t r = 0;
 
-	if (*i)
-		return (0);
-	r = read(info->readfd, buf, READ_BUF_SIZE);
-	if (r >= 0)
-		*i = r;
-	return (r);
+	if (*i == 0)
+	{
+		r = read(info->readfd, buf, READ_BUF_SIZE);
+		if (r >= 0)
+			*i = (size_t)r;
+	}
+	return r;
 }
 
 /**
