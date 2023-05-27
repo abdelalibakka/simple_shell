@@ -73,15 +73,17 @@ void _puts(char *str)
  */
 int _putchar(char c)
 {
-	static int i;
+	static int buf_index = 0;
 	static char buf[WRITE_BUF_SIZE];
 
-	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
+	if (c == BUF_FLUSH || buf_index >= WRITE_BUF_SIZE - 1)
 	{
-		write(1, buf, i);
-		i = 0;
+		write(1, buf, buf_index);
+		buf_index = 0;
 	}
+
 	if (c != BUF_FLUSH)
-		buf[i++] = c;
+		buf[buf_index++] = c;
+
 	return (1);
 }
