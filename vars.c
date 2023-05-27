@@ -148,7 +148,8 @@ int replace_vars(info_t *info)
  */
 int replace_string(char **old, char *new)
 {
-	free(*old);
+	char *temp = *old;
 	*old = new;
+	free(temp);
 	return (1);
 }
