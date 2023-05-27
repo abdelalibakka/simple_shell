@@ -58,17 +58,24 @@ char *_strncat(char *dest, char *src, int n)
 }
 
 /**
- **_strchr - locates a character in a string
- *@s: the string to be parsed
- *@c: the character to look for
- *Return: (s) a pointer to the memory area s
+ * _strchr - locates a character in a string
+ * @s: the string to be parsed
+ * @c: the character to look for
+ *
+ * Return: a pointer to the first occurrence of the character c in the string s,
+ *         or NULL if the character is not found.
  */
 char *_strchr(char *s, char c)
 {
-	do {
+	while (*s != '\0')
+	{
 		if (*s == c)
 			return (s);
-	} while (*s++ != '\0');
+		s++;
+	}
+
+	if (*s == c)
+		return (s);
 
 	return (NULL);
 }
